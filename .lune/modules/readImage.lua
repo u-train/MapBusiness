@@ -1,7 +1,8 @@
+
 local parsePPM = require("parsePPM")
 
 local function readImage(image)
-	local result = process.spawn("convert", {
+	local result = process.spawn("magick", {
 		"-compress",
 		"none",
 		image,

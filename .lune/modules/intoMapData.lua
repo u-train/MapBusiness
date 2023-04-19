@@ -2,7 +2,7 @@ local fs = require("@lune/fs")
 local readImage = require("readImage")
 
 local function encodeToCompressedHex(color)
-	return string.format("#%x%x%x", color.red / 255 * 16, color.green / 255 * 16, color.blue / 255 * 16)
+	return string.format("#%x%x%x", math.floor(color.red / 255 * 15), math.floor(color.green / 255 * 15), math.floor(color.blue / 255 * 15))
 end
 
 local function intoMapData(mapName)

@@ -98,6 +98,9 @@ local function mergeStudMap(unmergedMap)
 				d = markedDepth,
 				h = markedColor,
 			})
+			 
+			-- We can skip ahead the pixels we know for sure we touched.
+			-- x = endingX
 		end
 	end
 
