@@ -28,19 +28,15 @@ function Parser:number()
 		error("Expected number at end of buffer.")
 	end
 	
-	if not tonumber(self:peek()) then
+	local start, ending = string.find(self._blob, "%d+", self.cursor)
+	if start ~= self.cursor then
 		error(`Expected number, got {self:peek()}`)
 	end
 
-	local result = ""
+	local result = tonumber(self._blob:sub(start, ending))
+	self.cursor = ending + 1
 
-	while not self:endOfBuffer() and tonumber(self:peek()) do
-		result ..= self:chew()
-	end
-
-	local mustBeNumber = assert(tonumber(result), "Cannot fail")
-
-	return mustBeNumber
+	return result
 end
 
 function Parser:whitespace()
@@ -48,17 +44,30 @@ function Parser:whitespace()
 		error("Expected whitespace at end of buffer.")
 	end
 
-	if not string.find(self:peek(), "%s") then
+	local start, ending = string.find(self._blob, "%s+", self.cursor)
+	if start ~= self.cursor then
 		error(`Expected whitespace, got {self:peek()}`)
 	end
 
-	while not self:endOfBuffer() and string.find(self:peek(), "%s") do
-		self:chew()
-	end
+	self.cursor = ending + 1
 
 	return true
 end
 
+function Parser:color()
+	if self:endOfBuffer() then
+		error("Expected whitespace at end of buffer.")
+	end
+
+	local start, ending, red, green, blue = string.find(self._blob, "(%d+)%s+(%d+)%s+(%d+)%s+", self.cursor)
+	if start ~= self.cursor then
+		error(`Expected whitespace, got {self:peek()}`)
+	end
+
+	self.cursor = ending + 1
+
+	return { red = tonumber(red), green = tonumber(green), blue = tonumber(blue) }
+end
 local function parsePPM(blob)
 	blob = Parser.new(blob)
 
@@ -76,17 +85,10 @@ local function parsePPM(blob)
 	image.maximumValue = blob:number()
 	blob:whitespace()
 
-	image.data = {}
+	image.data = table.create(image.width * image.height)
 
 	while not blob:endOfBuffer() do
-		local red = blob:number()
-		blob:whitespace()
-		local green = blob:number()
-		blob:whitespace()
-		local blue = blob:number()
-		blob:whitespace()
-		
-		table.insert(image.data, {red = red, green = green, blue = blue})
+		table.insert(image.data, blob:color())
 	end
 
 	return image
