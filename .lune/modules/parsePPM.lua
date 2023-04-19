@@ -6,7 +6,7 @@ function Parser.new(blob)
 end
 
 function Parser:peek()
-	return self._blob:sub(self.cursor, self.cursor)	
+	return self._blob:sub(self.cursor, self.cursor)
 end
 
 function Parser:chew()
@@ -27,7 +27,7 @@ function Parser:number()
 	if self:endOfBuffer() then
 		error("Expected number at end of buffer.")
 	end
-	
+
 	local start, ending = string.find(self._blob, "%d+", self.cursor)
 	if start ~= self.cursor then
 		error(`Expected number, got {self:peek()}`)

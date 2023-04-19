@@ -45,11 +45,9 @@ local function mergeStudMap(unmergedMap)
 			while
 				-- Bounds check here.
 				endingX + 1 <= #unmergedMap[endingY]
-
 				-- Make sure the next stud over have matching properties.
 				and unmergedMap[endingY][endingX + 1].d == markedDepth
 				and unmergedMap[endingY][endingX + 1].h == markedColor
-
 				-- Make sure that the next stud wasn't already merged.
 				and not wasHit(endingX + 1, endingY)
 			do

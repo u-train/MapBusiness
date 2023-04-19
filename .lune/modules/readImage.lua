@@ -5,16 +5,14 @@ local function readImage(image)
 		"-compress",
 		"none",
 		image,
-		"PPM:-"
+		"PPM:-",
 	})
 
 	if result.ok then
 		local ppmImage = parsePPM(result.stdout)
 		return ppmImage
 	else
-		error(
-			`Wasn't able to read image ({image}) because: \n {result.stderr}`
-		)
+		error(`Wasn't able to read image ({image}) because: \n {result.stderr}`)
 	end
 end
 

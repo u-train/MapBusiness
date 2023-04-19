@@ -23,17 +23,17 @@ local function intoMapData(mapName)
 	local height = colorImage.height
 
 	local mapData = {}
-	
+
 	for y = 1, height do
 		local row = table.create(width)
 
 		for x = 1, width do
 			row[x] = {
-				h = encodeToCompressedHex(colorImage.data[x + (y-1) *height]),
-				d = heightImage.data[x + (y-1) *height].red
+				h = encodeToCompressedHex(colorImage.data[x + (y - 1) * height]),
+				d = heightImage.data[x + (y - 1) * height].red,
 			}
 		end
-		
+
 		mapData[y] = row
 	end
 
