@@ -60,16 +60,15 @@ local function mergeStudMap(unmergedMap)
 				-- We must check every new row to make sure we can merge it.
 				-- Let's assume optimistically that it does.
 				local matchingRow = true
+				local row = unmergedMap[endingY + 1]
 
 				for rowX = startingX, endingX do
-					local row = unmergedMap[endingY]
-
 					if
 						row == nil
 						or row[rowX].d ~= markedDepth
 						or row[rowX].h ~= markedColor
 						or wasHit(rowX, endingY + 1)
-						or startingY - (endingY + 1) < 2048
+						or startingY - (endingY + 1) >= 2048
 					then
 						matchingRow = false
 						break
@@ -127,6 +126,8 @@ end
 
 local function renderMap(mapData)
 	local optimizedMap = mergeStudMap(mapData)
+
+	print(#optimizedMap)
 
 	local root = roblox.Instance.new("Model")
 	root.Name = "Map"
