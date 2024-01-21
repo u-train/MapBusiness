@@ -1,6 +1,10 @@
 --!nocheck
 local roblox = require("@lune/roblox")
 
+local function withinSizeLimit(starting, ending)
+	return starting - (ending + 1) < 2048
+end
+
 local function mergeStudMap(unmergedMap)
 	-- This is a list of chunks.
 	-- A chunk is defined with (x1, y1), (x2, y2), depth, and color.
@@ -50,6 +54,7 @@ local function mergeStudMap(unmergedMap)
 				and unmergedMap[endingY][endingX + 1].h == markedColor
 				-- Make sure that the next stud wasn't already merged.
 				and not wasHit(endingX + 1, endingY)
+				and withinSizeLimit(endingX, endingY) 
 			do
 				-- Merge the stud in.
 				endingX += 1
@@ -68,7 +73,7 @@ local function mergeStudMap(unmergedMap)
 						or row[rowX].d ~= markedDepth
 						or row[rowX].h ~= markedColor
 						or wasHit(rowX, endingY + 1)
-						or startingY - (endingY + 1) >= 2048
+						or not withinSizeLimit(startingY, endingY)
 					then
 						matchingRow = false
 						break
